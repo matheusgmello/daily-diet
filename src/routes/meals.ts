@@ -17,12 +17,32 @@ export async function mealsRoutes(app: FastifyInstance) {
 
     await knex('meals').insert({
       id: crypto.randomUUID(),
-      user_id: crypto.randomUUID(), // gerando um id aleatório de user por enquanto
+      user_id: crypto.randomUUID(),
       name,
       description,
       isOnTheDiet,
     })
 
     return response.status(201).send()
+  })
+
+  app.get('/', async () => {
+    const meals = await knex('meals').select()
+
+    return {
+      meals,
+    }
+  })
+
+  app.get('/:id', async (request) => {
+    const getMealParamsSchema = z.object({
+      id: z.string().uuid(),
+    })
+
+    const params = getMealParamsSchema.parse(request.params)
+
+    const meal = await knex('meals').where('id', params.id).first()
+
+    return { meal }
   })
 }

@@ -12,15 +12,18 @@ export async function usersRoutes(app: FastifyInstance) {
       weight: z.number(),
       height: z.number(),
     })
-
     const { name, email, address, weight, height } = createUserBodySchema.parse(
       request.body,
     )
 
-    const checkUserExist = await knex.select('*').from('users').where({ email })
+    const checkUserExist = await knex
+      .select('*')
+      .from('users')
+      .where('email', email)
+      .first()
 
-    if (checkUserExist.length > 0) {
-      throw new Error('Este email já está vinculado a outro usuário')
+    if (checkUserExist) {
+      throw new Error('Este email já está vinculado à um usuário')
     }
 
     await knex('users').insert({
@@ -31,6 +34,7 @@ export async function usersRoutes(app: FastifyInstance) {
       weight,
       height,
     })
+
     return response.status(201).send()
   })
 }
