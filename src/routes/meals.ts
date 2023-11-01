@@ -12,11 +12,13 @@ export async function mealsRoutes(app: FastifyInstance) {
         error: 'Unauthorized',
       })
     }
+
     const [user] = await knex('users')
       .where('session_id', sessionId)
       .select('id')
 
     const userId = user.id
+
     const createMealBodySchema = z.object({
       name: z.string(),
       description: z.string(),
@@ -38,8 +40,21 @@ export async function mealsRoutes(app: FastifyInstance) {
     return response.status(201).send()
   })
 
-  app.get('/', async () => {
-    const meals = await knex('meals').select()
+  app.get('/', async (request, response) => {
+    const sessionId = request.cookies.sessionId
+
+    if (!sessionId) {
+      return response.status(401).send({
+        error: 'Unauthorized',
+      })
+    }
+    const [user] = await knex('users')
+      .where('session_id', sessionId)
+      .select('id')
+
+    const userId = user.id
+
+    const meals = await knex('meals').where('user_id', userId).select()
 
     return {
       meals,
