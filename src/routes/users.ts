@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify'
 import { knex } from '../database'
-import crypto from 'node:crypto'
+import crypto, { randomUUID } from 'node:crypto'
 import { z } from 'zod'
 
 export async function usersRoutes(app: FastifyInstance) {
@@ -12,6 +12,7 @@ export async function usersRoutes(app: FastifyInstance) {
       weight: z.number(),
       height: z.number(),
     })
+
     const { name, email, address, weight, height } = createUserBodySchema.parse(
       request.body,
     )
@@ -26,6 +27,16 @@ export async function usersRoutes(app: FastifyInstance) {
       throw new Error('Este email já está vinculado à um usuário')
     }
 
+    let sessionId = request.cookies.sessionId
+
+    if (!sessionId) {
+      sessionId = randomUUID()
+
+      response.cookie('sessionId', sessionId, {
+        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+      })
+    }
+
     await knex('users').insert({
       id: crypto.randomUUID(),
       name,
@@ -33,6 +44,7 @@ export async function usersRoutes(app: FastifyInstance) {
       address,
       weight,
       height,
+      session_id: sessionId,
     })
 
     return response.status(201).send()
