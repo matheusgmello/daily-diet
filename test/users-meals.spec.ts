@@ -18,26 +18,25 @@ describe('Users/meals routes', () => {
     execSync('npm run knex migrate:latest')
   })
 
-  it('should be able to create a new account', async () => {
-    await supertestRequest(app.server)
-      .post('/users')
-      .send({
-        name: 'Usuário_teste',
-        email: 'email@email.com',
-        address: 'Rua de teste',
-        weight: 80.5,
-        height: 174,
-      })
-      .expect(201)
-
-    // console.log(response.get('Set-Cookie'))
-  })
-
+  // Dados do novo usuário
   const email = 'teste@email.com'
   const name = 'teste'
   const address = 'Rua de teste'
   const weight = 80.5
   const height = 174
+
+  it('should be able to create a new account', async () => {
+    await supertestRequest(app.server)
+      .post('/users')
+      .send({
+        name,
+        email,
+        address,
+        weight,
+        height,
+      })
+      .expect(201)
+  })
 
   it('should be able to create a new meal', async () => {
     const createUserResponse = await supertestRequest(app.server)
@@ -54,6 +53,8 @@ describe('Users/meals routes', () => {
     const cookies = createUserResponse.get('Set-Cookie')
 
     const userId = await knex('users').select('id').where({ email })
+
+    // console.log(userId)
 
     await supertestRequest(app.server)
       .post('/meals')
@@ -82,8 +83,6 @@ describe('Users/meals routes', () => {
 
     const userId = await knex('users').select('id').where({ email })
 
-    // console.log(userId)
-
     await supertestRequest(app.server)
       .post('/meals')
       .send({
@@ -105,5 +104,50 @@ describe('Users/meals routes', () => {
         description: 'Teste',
       }),
     ])
+  })
+
+  it('should be able to get a specific meals', async () => {
+    const createUserResponse = await supertestRequest(app.server)
+      .post('/users')
+      .send({
+        name,
+        email,
+        address,
+        weight,
+        height,
+      })
+
+    const cookies = createUserResponse.get('Set-Cookie')
+
+    const userId = await knex('users').select('id').where({ email })
+
+    await supertestRequest(app.server)
+      .post('/meals')
+      .send({
+        user_id: userId,
+        name: 'Refeição de Teste',
+        description: 'Teste',
+        isOnTheDiet: false,
+      })
+      .set('Cookie', cookies)
+
+    const listMealsResponse = await supertestRequest(app.server)
+      .get('/meals')
+      .set('Cookie', cookies)
+      .expect(200)
+
+    const mealId = listMealsResponse.body.meals[0].id
+
+    const getMealResponse = await supertestRequest(app.server)
+      .get(`/meals/${mealId}`)
+      .set('Cookie', cookies)
+      .expect(200)
+
+    expect(getMealResponse.body.meal).toEqual(
+      expect.objectContaining({
+        name: 'Refeição de Teste',
+        description: 'Teste',
+      }),
+    )
   })
 })
