@@ -5,6 +5,13 @@ por um usuário ao longo do dia.
 
 Ao realizar o registro, um cookie é gerado e armazenado para posterior validação. Este cookie será adicionado à coluna 'session_ID' na tabela 'users'.Posteriormente, utilizaremos esse identificador para autenticar o usuário que está inserindo uma nova refeição, permitindo-nos associar o ID do usuário à tabela 'meals'.
 
+<p align="center">
+  <img src="./assets/menu.png" alt="Default Image" style="width: 250px"/>
+  <img src="./assets/menu-meal.png" alt="Meal Image" style="width: 250px"/>
+  <img src="./assets/menu-resume.png" alt="Meal Image" style="width: 250px"/>
+   <img src="./assets/congratulations.png" alt="Meal Image" style="width: 250px"/>
+</p>
+
 ## Tecnologias 
 - [Knex](https://knexjs.org/)
 - [Zod](https://zod.dev/)
