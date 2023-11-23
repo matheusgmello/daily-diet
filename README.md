@@ -9,7 +9,6 @@ Ao realizar o registro, um cookie é gerado e armazenado para posterior validaç
   <img src="./assets/menu.png" alt="Default Image" style="width: 250px"/>
   <img src="./assets/menu-meal.png" alt="Meal Image" style="width: 250px"/>
   <img src="./assets/menu-resume.png" alt="Meal Image" style="width: 250px"/>
-   <img src="./assets/congratulations.png" alt="Meal Image" style="width: 250px"/>
 </p>
 
 ## Tecnologias 
