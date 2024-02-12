@@ -1,22 +1,22 @@
 # DailyDiet - API
 
-## 💻 Getting started
+## 💻 Passo a passo
 
-> To run this commands you must enter the `packages/api` folder
+> Para executar estes comandos, você deve entrar na pasta `packages/api`
 
-### Setup environment variables
+### Configure variáveis  de ambiente
 
 ```bash
 cp .env.example .env
 ```
 
-### Run Migrations
+### Rode as Migrations
 
 ```bash
 node ace migration:run
 ```
 
-### Start the server
+### Rode o servidor
 
 ```bash
 pnpm run dev

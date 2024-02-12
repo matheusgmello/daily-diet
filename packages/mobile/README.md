@@ -1,20 +1,20 @@
 # DailyDiet - App
 
-## 💻 Getting started
+## 💻 Passo a passo
 
-> To run this commands you must enter the `packages/api` folder
+> Para executar estes comandos, você deve entrar na pasta `packages/api`
 
-### Requirements
+### Requisitos
 
-- The [API](../api/README.md) must be running
+- A [API](../api/README.md) precisa estar rodando
 
-### Setup environment variables
+### Configure variáveis de ambiente
 
 ```bash
 cp .env.example .env
 ```
 
-### Start the app
+### Rode o aplicativo
 
 ```bash
 pnpm run dev
